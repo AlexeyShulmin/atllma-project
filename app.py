@@ -10,6 +10,8 @@ client = chromadb.PersistentClient(path="./chromadb_client_data")
 default_ef = embedding_functions.DefaultEmbeddingFunction()
 collection = client.get_or_create_collection("doc_search_v1", embedding_function=default_ef)
 
+history = {}
+
 # Process query (adapted from your code)
 def process_query(query):
     query_embedding = default_ef([query])
@@ -33,7 +35,11 @@ def process_query(query):
 @app.route('/query', methods=['POST'])
 def handle_query():
     query = request.json['query']
-    response = process_query(query)
+    if query in history.keys():
+        response = history[query]
+    else:
+        response = process_query(query)
+        history[query] = response
     return jsonify({'response': response})
 
 if __name__ == '__main__':
