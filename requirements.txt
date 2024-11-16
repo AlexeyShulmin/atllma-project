@@ -1,0 +1,7 @@
+flask
+mistralai
+chromadb
+streamlit
+beautifulsoup4
+requests
+tqdm
